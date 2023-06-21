@@ -1,6 +1,6 @@
 ---
 title: "Activity: Street or Road?"
-author: "YOUR NAME HERE"
+author: "Abdulaziz Bokijonov"
 output: html_notebook
 ---
 
@@ -8,10 +8,13 @@ output: html_notebook
 
 ```{r}
 #load libraries 
-
+library(tidyverse)
+library(dcData)
 #load in the data here 
 # we will only be using the "street-addresses.csv" file from the text
-
+download.file(url="https://mdbeckman.github.io/dcSupplement/data/street-addresses.csv",
+              destfile = "street-addresses.csv")
+DataTable <- read.csv("street-addresses.csv")
 
 
 ```
@@ -19,25 +22,32 @@ output: html_notebook
 ## Recreate Solved Example using `sample(50)`
 
 ```{r}
-
-
+Sample <- 
+  DataTable %>%
+  sample_n(size = 50)
 ```
 
 ## Recreate Soved Example using the entire `Address` data set
 
 ```{r}
-
-
+Matches <- 
+  DataTable %>%
+  filter(grepl(pattern = "PO", address))
 ```
 
 #### Additional Question: How many addresses are a PO BOX (including NCSU BOX)? 
 
 ```{r}
+Matches2 <- 
+  Sample %>%
+  filter(grepl(pattern = "NCSU", address))
 
+nrow(Matches)
+nrow(Matches2)
 
 ```
 
-My answer here...... 
+There are 26 PO and 8 NCSU BOX addresses. In total 34 matches
 
 
 ## Back to the Streets: Your Turn
@@ -47,14 +57,20 @@ My answer here......
 ```{r}
 pattern <- "(ST|RD|ROAD)"
 LeftOvers <-
-  Addresses %>% 
+  DataTable %>%  
   filter( !grepl(pattern, address),
           !grepl("\\sAPT|UNIT\\s[\\d]+$", address),
           !grepl(" BOX ", address)
           )
 ```
 
-My answer here.......
+1. Assigns string "(ST|RD|ROAD)" to pattern variable
+2. New object LeftOvers and assigns following lines
+3. DataTable followed by %>% which means next lines are related to DataTable variable
+4. Filter function with !grepl function inside that excludes  rows that have ST RD or ROAD in address column
+5. grepl function has the pattern matches strings in address column that end with either " APT" or " UNIT" followed by one or more digits, and ! excludes those matched rows.
+6. Excludes address column entries that contain " BOX"
+7. Closes filter function
 
 #### Part 2: Implement your method on the entire `Addresses` data set. Explain how your code works line by line.
 
