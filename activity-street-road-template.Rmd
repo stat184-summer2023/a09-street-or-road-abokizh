@@ -38,8 +38,11 @@ Matches <-
 #### Additional Question: How many addresses are a PO BOX (including NCSU BOX)? 
 
 ```{r}
+Matches <- 
+  DataTable %>%
+  filter(grepl(pattern = "PO", address))
 Matches2 <- 
-  Sample %>%
+  DataTable %>%
   filter(grepl(pattern = "NCSU", address))
 
 nrow(Matches)
@@ -47,7 +50,7 @@ nrow(Matches2)
 
 ```
 
-There are 26 PO and 8 NCSU BOX addresses. In total 34 matches
+There are 8347 PO and 2380 NCSU BOX addresses. In total 10727 matches
 
 
 ## Back to the Streets: Your Turn
@@ -75,17 +78,26 @@ LeftOvers <-
 #### Part 2: Implement your method on the entire `Addresses` data set. Explain how your code works line by line.
 
 ```{r}
-
-
+AddressEndings <- data.frame(ending = sub('.*\\ ', '', LeftOvers$address))
+AddressEndings %>%
+  group_by(ending) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
 
 ```
 
-My answer here.......
+1. Created new object AddressEnding and assigned it a data frame that uses sub() function on LeftOvers object and gets the last string after the last white space in the address column
+2. %>% on AddresEnding which makes the next lines make operations with AddresEnding
+3. summarise function that count the groups of endings of the streets
+3. sort in descending order
 
 #### Additional Question 1: Present your result from part 2 by providing a table in descending order of popularity for the street name endings you found
 
 ```{r}
-
+AddressEndings %>%
+  group_by(ending) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
 
 ```
 
