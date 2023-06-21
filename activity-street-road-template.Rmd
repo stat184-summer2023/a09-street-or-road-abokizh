@@ -25,6 +25,7 @@ DataTable <- read.csv("street-addresses.csv")
 Sample <- 
   DataTable %>%
   sample_n(size = 50)
+Sample
 ```
 
 ## Recreate Soved Example using the entire `Address` data set
@@ -33,6 +34,7 @@ Sample <-
 Matches <- 
   DataTable %>%
   filter(grepl(pattern = "PO", address))
+Matches
 ```
 
 #### Additional Question: How many addresses are a PO BOX (including NCSU BOX)? 
@@ -94,11 +96,11 @@ AddressEndings %>%
 #### Additional Question 1: Present your result from part 2 by providing a table in descending order of popularity for the street name endings you found
 
 ```{r}
-AddressEndings %>%
+popular <- AddressEndings %>%
   group_by(ending) %>%
   summarise(count = n()) %>%
   arrange(desc(count))
-
+popular
 ```
 
 #### Additional Question 2: Present your result by using ggplot to a bar chart in descending order of popularity for the street name endings you found previously.
@@ -106,9 +108,11 @@ AddressEndings %>%
 Note: make sure your order street names according to popularity, not alphabetically.
 
 ```{r}
-
+head(popular,10) %>%
+  ggplot(aes(x=reorder(ending, -count),y=count)) +
+  geom_bar(stat='identity',position='stack', width=.9)
 ```
 
 #### Additional Question 3: Comment on any patterns you see
 
-My answer here.......
+I used only top 10 entries to keep the plot clean and the most popular one is DR, then DRIVE. "Drive" or its abriviation are the most popular endings.
